@@ -39,7 +39,9 @@ Promedio: 49.989488
 
 Estos valores son coherentes con un muestreo uniforme en [0, 100] (promedio ≈ 50).
 
-4) Parte B — Latencia punto a punto (Send/Recv)
+---
+
+##4) Parte B — Latencia punto a punto (Send/Recv)##
 Diseño y ejecución (resumen):
 
 Dos procesos exactos (-np 2).
@@ -67,6 +69,8 @@ size_bytes	RTT (µs)	One-way (µs)
 Artefactos: results/latencias.csv, results/latency_rtt.png (RTT vs tamaño) y results/latency_bw.png (throughput one-way vs tamaño).
 Estimación de throughput one-way para 1 MiB: ≈ 23 GB/s (1,048,576 bytes / 45.49 µs).
 
+---
+
 5) Análisis e interpretación
 Zona dominada por latencia (mensajes pequeños): el RTT se mantiene casi plano (~1–2 µs). Ese es el costo fijo del stack MPI (llamadas, sincronización y copias mínimas).
 
@@ -74,7 +78,9 @@ Transición a zona dominada por ancho de banda (mensajes grandes): al crecer el 
 
 Contexto de ejecución: corrimos en una sola máquina (memoria compartida). En un clúster real, la red (latencia y ancho de banda) modificaría los números, especialmente para tamaños medianos y grandes.
 
-6) Decisiones técnicas (y por qué)
+---
+
+6) Decisiones técnicas 
 Promedio global por SUMA/N en lugar de promediar promedios locales → robusto si los trozos no son iguales.
 
 Validación previa de N % procesos == 0 → evita Scatter inconsistente y errores silenciosos.
@@ -84,6 +90,8 @@ Warmup + Barrier opcional → reducimos ruido de arranque y medimos en condicion
 Logs solo en root para resultados finales → salida limpia y fácil de revisar.
 
 Tipos de dato cuidados (float64 / suma en int64) → precisión y sin overflow.
+
+---
 
 7) Reproducibilidad y trazabilidad
 Entorno: macOS (portátil), Python 3.x, numpy, mpi4py, Open MPI instalado con Homebrew.
@@ -102,8 +110,7 @@ Fecha de corrida: 2025-08-08 (UTC-6, Costa Rica).
 
 Con estos archivos, cualquier persona puede repetir la corrida y verificar los mismos resultados.
 
-8) Conclusión
-Cumplimos los objetivos: implementamos correctamente las colectivas y medimos la latencia con un diseño claro, validado y reproducible. Los resultados son consistentes con la teoría (latencia base en mensajes pequeños y saturación por ancho de banda en grandes). Dejamos el proyecto en estado de entrega, con documentación, datos y gráficos que respaldan el trabajo.
+---
 
-Copy
-Edit
+##8) Conclusión##
+Cumplimos los objetivos: implementamos correctamente las colectivas y medimos la latencia con un diseño claro, validado y reproducible. Los resultados son consistentes con la teoría (latencia base en mensajes pequeños y saturación por ancho de banda en grandes). Dejamos el proyecto en estado de entrega, con documentación, datos y gráficos que respaldan el trabajo.
