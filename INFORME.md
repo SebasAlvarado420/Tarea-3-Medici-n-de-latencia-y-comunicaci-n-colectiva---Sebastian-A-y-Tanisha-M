@@ -27,15 +27,7 @@ Para medir latencia, usamos **dos procesos**. El rank 0 envía un mensaje y espe
 Las figuras `latency_rtt.png` y `latency_bw.png` muestran dos cosas: (1) la zona **dominada por latencia** en mensajes pequeños (RTT en el orden de microsegundos, casi constante), y (2) a medida que el mensaje crece, la métrica se desplaza a estar **limitada por ancho de banda** y el throughput sube hasta estabilizarse.
 
 ## 4) Interpretación breve
-- En mensajes muy chicos, el costo fijo del stack (llamadas MPI, sincronización, copias) manda, por eso la curva de RTT arranca casi plana. Ese ≈1–2 µs es nuestra **latencia base**.
+- En mensajes muy cortos, el costo fijo del stack (llamadas MPI, sincronización, copias) manda, por eso la curva de RTT arranca casi plana. Ese ≈1–2 µs es nuestra **latencia base**.
 - Cuando los mensajes crecen (≥ decenas de KiB), lo que manda es la **velocidad de copia** entre espacios de memoria/procesos. Por eso el throughput sube y luego tiende a estabilizarse.
 - Como corrimos en la misma máquina, estos números reflejan más bien límites de **memoria compartida** y la implementación local de MPI. En un cluster real, la red (latencia y ancho de banda) cambiaría bastante los valores.
 
-## 5) Conclusión
-Cumplimos con las dos partes: colectivas y punto a punto. Dejamos scripts claros, reproducibles, resultados medidos y gráficas. Si el profe pide extender, podríamos variar `iters`, probar más tamaños intermedios y comparar con/ sin `Barrier` para comentar la variabilidad.
-
-## 6) Cómo reproducir rápido
-```bash
-mpirun -np 4 python estadisticas_mpi.py --n 1000000 --mode float
-mpirun -np 2 python latencia_mpi.py --iters 15000 --sizes 1,4096,65536,1048576 --barrier --csv results/latencias.csv
-```
